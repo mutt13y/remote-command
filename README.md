@@ -5,7 +5,7 @@ Concourse custom resourse which executes arbitary commands over ssh and converts
 
 This is the source for captainstuart/remote-command
 
-###Parameters
+### Parameters
 
 ```command``` the remote cmmand to run
 
@@ -17,5 +17,5 @@ This is the source for captainstuart/remote-command
 
 ```debug``` The key is writen to a file and then deleted after the command is executed. This is an issue if you need to intercept the container and see debug. Set debug: true to prevent the keyfile from being deleted 
 
-###Example usage
+### Example usage
 
