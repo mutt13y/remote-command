@@ -1,0 +1,46 @@
+#!/usr/bin/python3
+import sys
+import os
+import subprocess
+import json
+from pprint import pprint
+
+VERSION = "1.0"
+
+print(f'Version: V{VERSION}', file=sys.stderr)
+
+stdin = sys.stdin.read()
+
+params = json.loads(stdin)
+#pprint(params, stream=sys.stderr)
+
+source = params.get('source', None)
+if not source:
+    raise Exception("No source paramater provided")
+for p in ['user', 'host', 'key', 'command']:
+    if p not in source:
+        raise Exception(f"Parameter {p} is required")
+
+user = source['user']
+key = source['key']
+host = source['host']
+command = source['command']
+debug = source.get('debug', False)
+
+print(f'u={user} h={host} v={VERSION}', file=sys.stderr)
+
+
+with open('key', 'w') as f:
+    print(key, file=f)
+os.chmod('key', 0o0600)
+
+try:
+    o = subprocess.getoutput(f'ssh -o stricthostkeychecking=no -l {user} -i key {host} -- "{command}"')
+except Exception as e:
+    print(f'Error running ssh: {e}')
+    sys.exit(1)
+else:
+    output = [{"ref": X} for X in o.split('\n')]
+    print(json.dumps(output))
+finally:
+    if not debug: os.remove('key')

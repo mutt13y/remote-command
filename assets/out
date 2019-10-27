@@ -1,0 +1,3 @@
+#!/usr/bin/python3
+
+print('{ "version": { "ref": "none", "message": "put not supported" }, "metadata": [{ "name": "message", "value": "Hello World" }] }')
