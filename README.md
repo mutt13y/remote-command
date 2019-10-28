@@ -19,3 +19,28 @@ This is the source for captainstuart/remote-command
 
 ### Example usage
 
+```
+resource_types:
+- name: remote-command
+  type: docker-image
+  source:
+    repository: captainstuart/remote-command
+    tag: '1.0'
+
+
+resources:
+- name: switch_logs
+  type: remote-command
+  source:
+    command: "grep LINEPROTO /rsyslog/cisco/switch.log | grep 'state to up' | grep '10.255.255.20 '"
+    host: 192.0.0.2
+    user: concourse
+    key: ((server_key))
+
+jobs:
+- name: Switch
+  plan:
+  - get: switch_logs
+    trigger: true
+    
+```
